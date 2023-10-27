@@ -79,9 +79,9 @@ jobs:
       # Start frpc
       - name: Start frpc
         run: |
-          ls frp_windows_amd64
           $frpcPath = "${{ github.workspace }}\frp_windows_amd64\frpc.exe"
-          Start-Process -FilePath $frpcPath -ArgumentList "-c", $frpcConfigPath
+          $frpcProcess = Start-Process -FilePath $frpcPath -ArgumentList "-c", $frpcConfigPath -NoNewWindow -RedirectStandardOutput -PassThru
+          $frpcProcess.WaitForExit()
 
       # Block the workflow
       - name: Block workflow
