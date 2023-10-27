@@ -40,10 +40,10 @@ jobs:
       # Install frpc
       - name: Install frpc
         run: |
-          wget https://github.com/fatedier/frp/releases/latest/download/frp_0.52.3_linux_amd64.tar.gz
-          tar -xzf frp_0.37.1_linux_amd64.tar.gz
-          sudo mv frp_0.37.1_linux_amd64/frpc /usr/local/bin/
-          rm -rf frp_0.37.1_linux_amd64*
+          wget -O frp_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/latest/download/frp_0.52.3_linux_amd64.tar.gz
+          tar -xzf frp_linux_amd64.tar.gz
+          sudo mv frp_linux_amd64/frpc /usr/local/bin/
+          rm -rf frp_linux_amd64*
 
       # Configure frpc
       - name: Configure frpc
