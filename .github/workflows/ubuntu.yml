@@ -63,6 +63,5 @@ jobs:
         run: sudo frpc -c frpc.ini
 
       - name: Don't kill instace
-        if: ${{ failure() }}
         run: sleep 1h # Prevent to killing instance after failure
       
