@@ -1,3 +1,9 @@
+# GitHub Secrets:
+# - SSH_PASSWD: <your_ssh_password>
+# - FRPC_SERVER_ADDR: <frpc_server_address>
+# - FRPC_SERVER_PORT: <frpc_server_port>
+# - FRPC_TOKEN: <frpc_token>
+
 name: CI
 
 on:
@@ -19,6 +25,44 @@ jobs:
       - name: Start SSH service
         run: sudo systemctl start ssh
 
+      # Set up SSH connection
+      - name: Set up SSH connection
+        run: |
+          sudo mkdir /var/run/sshd
+          echo 'root:${{ secrets.SSH_PASSWD }}' | sudo chpasswd
+          sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+          sudo service ssh restart
+
       # Check SSH service status
       - name: Check SSH service status
         run: systemctl status ssh
+
+      # Install frpc
+      - name: Install frpc
+        run: |
+          wget https://github.com/fatedier/frp/releases/latest/download/frp_0.52.3_linux_amd64.tar.gz
+          tar -xzf frp_0.37.1_linux_amd64.tar.gz
+          sudo mv frp_0.37.1_linux_amd64/frpc /usr/local/bin/
+          rm -rf frp_0.37.1_linux_amd64*
+
+      # Configure frpc
+      - name: Configure frpc
+        run: |
+          echo "[common]" > frpc.ini
+          echo "server_addr = ${{ secrets.FRPC_SERVER_ADDR }}" >> frpc.ini
+          echo "server_port = ${{ secrets.FRPC_SERVER_PORT }}" >> frpc.ini
+          echo "token = ${{ secrets.FRPC_TOKEN }}" >> frpc.ini
+          echo "[ssh]" >> frpc.ini
+          echo "type = tcp" >> frpc.ini
+          echo "local_ip = 127.0.0.1" >> frpc.ini
+          echo "local_port = 22" >> frpc.ini
+          echo "remote_port = 6000" >> frpc.ini
+
+      # Start frpc
+      - name: Start frpc
+        run: sudo frpc -c frpc.ini
+
+      - name: Don't kill instace
+        if: ${{ failure() }}
+        run: sleep 1h # Prevent to killing instance after failure
+      
