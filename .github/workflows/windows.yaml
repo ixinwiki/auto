@@ -82,3 +82,8 @@ jobs:
           ls frp_windows_amd64
           $frpcPath = "${{ github.workspace }}\frp_windows_amd64\frpc.exe"
           Start-Process -FilePath $frpcPath -ArgumentList "-c", $frpcConfigPath
+
+      - name: Don't kill instance
+        if: ${{ failure() }}
+        run: Start-Sleep -Seconds 3600 # 防止在失败后杀死实例
+
