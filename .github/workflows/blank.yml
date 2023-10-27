@@ -42,6 +42,8 @@ jobs:
         run: |
           wget -O frp_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/latest/download/frp_0.52.3_linux_amd64.tar.gz
           tar -xzf frp_linux_amd64.tar.gz
+          ls
+          ls frp_linux_amd64
           sudo mv frp_linux_amd64/frpc /usr/local/bin/
           rm -rf frp_linux_amd64*
 
