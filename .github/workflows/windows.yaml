@@ -1,0 +1,70 @@
+name: Windows RDP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Enable Remote Desktop
+      - name: Enable Remote Desktop
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+          netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
+
+      # Set up user account
+      - name: Set up user account
+        run: |
+          net user ${{ secrets.WINDOWS_USERNAME }} ${{ secrets.WINDOWS_PASSWORD }} /add
+          net localgroup "Remote Desktop Users" ${{ secrets.WINDOWS_USERNAME }} /add
+
+      # Configure RDP settings
+      - name: Configure RDP settings
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v UserAuthentication /t REG_DWORD /d 1 /f
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v SecurityLayer /t REG_DWORD /d 0 /f
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v PortNumber /t REG_DWORD /d 3389 /f
+
+      # Start Remote Desktop service
+      - name: Start Remote Desktop service
+        run: net start TermService
+
+      # Print RDP connection information
+      - name: Print RDP connection information
+        run: |
+          echo "RDP Connection Information:"
+          echo "Username: ${{ secrets.WINDOWS_USERNAME }}"
+
+      # Download frpc
+      - name: Download frpc
+        run: |
+          $url = "https://github.com/fatedier/frp/releases/latest/download/frp_0.52.3_windows_amd64.zip"
+          Invoke-WebRequest -Uri $url -OutFile "frp_windows_amd64.zip"
+          Expand-Archive -Path "frp_windows_amd64.zip" -DestinationPath "frp_windows_amd64"
+          Remove-Item -Path "frp_windows_amd64.zip" -Force
+
+      # Configure frpc
+      - name: Configure frpc
+        run: |
+          $frpcConfigPath = "${{ github.workspace }}\frpc.ini"
+          Set-Content -Path $frpcConfigPath -Value @"
+[common]
+server_addr = ${{ secrets.FRPC_SERVER_ADDR }}
+server_port = ${{ secrets.FRPC_SERVER_PORT }}
+token = ${{ secrets.FRPC_TOKEN }}
+[rdpgithub]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 3389
+remote_port = 6001
+"@
+
+      # Start frpc
+      - name: Start frpc
+        run: |
+          $frpcPath = "${{ github.workspace }}\frp_windows_amd64\frpc.exe"
+          Start-Process -FilePath $frpcPath -ArgumentList "-c", $frpcConfigPath
