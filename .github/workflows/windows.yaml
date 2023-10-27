@@ -74,5 +74,6 @@ jobs:
       # Start frpc
       - name: Start frpc
         run: |
+          ls
           $frpcPath = "${{ github.workspace }}\frp_windows_amd64\frpc.exe"
           Start-Process -FilePath $frpcPath -ArgumentList "-c", $frpcConfigPath
