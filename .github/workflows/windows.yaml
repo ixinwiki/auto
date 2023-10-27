@@ -1,3 +1,11 @@
+# GitHub Secrets:
+# - SSH_PASSWD: <your_ssh_password>
+# - FRPC_SERVER_ADDR: <frpc_server_address>
+# - FRPC_SERVER_PORT: <frpc_server_port>
+# - FRPC_TOKEN: <frpc_token>
+# - WINDOWS_USERNAME
+# - WINDOWS_PASSWORD
+
 name: Windows RDP
 
 on:
