@@ -4,11 +4,10 @@
 # - FRPC_SERVER_PORT: <frpc_server_port>
 # - FRPC_TOKEN: <frpc_token>
 
-name: CI
+name: Ubuntu SSH
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   build:
