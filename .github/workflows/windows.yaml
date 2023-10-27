@@ -81,7 +81,7 @@ jobs:
         run: |
           ls frp_windows_amd64
           $frpcPath = "${{ github.workspace }}/frp_windows_amd64/frpc.exe"
-          & $frpcPath -c $frpcConfigPath
+          ./frp_windows_amd64/frpc.exe -c ./frpc.ini
 
       # Block the workflow
       - name: Block workflow
