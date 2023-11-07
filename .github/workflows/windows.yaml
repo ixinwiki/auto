@@ -24,11 +24,17 @@ jobs:
           reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
           netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
 
-      # Set up user account
-      - name: Set up user account
+      # # Set up user account
+      # - name: Set up user account
+      #   run: |
+      #     net user ${{ secrets.WINDOWS_USERNAME }} ${{ secrets.WINDOWS_PASSWORD }} /add
+      #     net localgroup "Remote Desktop Users" ${{ secrets.WINDOWS_USERNAME }} /add
+
+       # Modify Administrator password
+      - name: Modify Administrator password
         run: |
-          net user ${{ secrets.WINDOWS_USERNAME }} ${{ secrets.WINDOWS_PASSWORD }} /add
-          net localgroup "Remote Desktop Users" ${{ secrets.WINDOWS_USERNAME }} /add
+          net user Administrator ${{ secrets.WINDOWS_PASSWORD }}
+          net localgroup "Remote Desktop Users" Administrator /add
 
       # Configure RDP settings
       - name: Configure RDP settings
