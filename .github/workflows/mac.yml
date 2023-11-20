@@ -16,3 +16,33 @@ jobs:
         VNC_PASSWORD: ${{ secrets.SSH_PASSWD }}
       run: source configure.sh "$VNC_USER_PASSWORD" "$VNC_PASSWORD"
 
+      # Install frpc
+    - name: Install frpc
+      run: |
+          wget -O frp_darwin_amd64.tar.gz https://github.com/fatedier/frp/releases/latest/download/frp_0.52.3_darwin_amd64.tar.gz
+          tar -xzf frp_darwin_amd64.tar.gz
+          mv frp_*_darwin_amd64 frp_darwin_amd64
+          sudo mv frp_darwin_amd64/frpc /usr/local/bin/
+          rm -rf frp_darwin_amd64*
+
+      # Configure frpc
+    - name: Configure frpc
+      run: |
+          echo "[common]" > frpc.ini
+          echo "server_addr = ${{ secrets.FRPC_SERVER_ADDR }}" >> frpc.ini
+          echo "server_port = ${{ secrets.FRPC_SERVER_PORT }}" >> frpc.ini
+          echo "token = ${{ secrets.FRPC_TOKEN }}" >> frpc.ini
+          echo "[ssh]" >> frpc.ini
+          echo "type = tcp" >> frpc.ini
+          echo "local_ip = 127.0.0.1" >> frpc.ini
+          echo "local_port = 5900" >> frpc.ini
+          echo "remote_port = 5900" >> frpc.ini
+
+      # Start frpc
+    - name: Start frpc
+      run: sudo frpc -c frpc.ini
+
+    - name: Don't kill instance
+      if: ${{ failure() }}
+      run: sleep 1h # Prevent killing the instance after failure
+
