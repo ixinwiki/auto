@@ -14,7 +14,7 @@ jobs:
       env:
         VNC_USER_PASSWORD: ${{ secrets.SSH_PASSWD }}
         VNC_PASSWORD: ${{ secrets.SSH_PASSWD }}
-      run: source configure.sh "$VNC_USER_PASSWORD" "$VNC_PASSWORD"
+      run: source macos.sh "$VNC_USER_PASSWORD" "$VNC_PASSWORD"
 
       # Install frpc
     - name: Install frpc
