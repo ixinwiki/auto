@@ -24,11 +24,30 @@ jobs:
           reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
           netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
 
+      - name: Set system language to Chinese
+        run: |
+          reg add "HKCU\Control Panel\International" /v sLanguage /t REG_SZ /d "chs" /f
+          reg add "HKCU\Control Panel\International" /v sCountry /t REG_SZ /d "CN" /f
+          reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d "yyyy-MM-dd" /f
+          reg add "HKCU\Control Panel\International" /v sTimeFormat /t REG_SZ /d "HH:mm:ss" /f
+          reg add "HKCU\Control Panel\International" /v sLongDate /t REG_SZ /d "yyyy'年'M'月'd'日' dddd" /f
+          reg add "HKCU\Control Panel\International" /v iCountry /t REG_SZ /d "86" /f
+          reg add "HKCU\Control Panel\International" /v iDate /t REG_SZ /d "2" /f
+          reg add "HKCU\Control Panel\International" /v iTime /t REG_SZ /d "1" /f
+
+          
       # Set up user account
       - name: Set up user account
         run: |
           net user ${{ secrets.WINDOWS_USERNAME }} ${{ secrets.WINDOWS_PASSWORD }} /add
           net localgroup "Remote Desktop Users" ${{ secrets.WINDOWS_USERNAME }} /add
+
+       # Modify Administrator password
+      - name: Modify Administrator password
+        run: |
+          net user runneradmin ${{ secrets.WINDOWS_PASSWORD }}
+          net user installer ${{ secrets.WINDOWS_PASSWORD }}
+          net localgroup "Remote Desktop Users" runneradmin /add
 
       # Configure RDP settings
       - name: Configure RDP settings
