@@ -8,6 +8,8 @@ name: Ubuntu v2
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
 
 jobs:
   build:
@@ -82,6 +84,7 @@ jobs:
         run: sudo ./xray/xray -c config.json &
 
       - name: Don't kill instace
-        run: sleep 6h # Prevent to killing instance after failure
-
+        run: |
+         chmod +x ./time.sh
+         sleep $(bash ./time.sh)
 # /home/runner/work/auto/auto/.github/workflows/ubuntu_v2.yml
