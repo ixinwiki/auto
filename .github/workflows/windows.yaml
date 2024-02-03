@@ -74,7 +74,7 @@ jobs:
           Expand-Archive -Path "frp_windows_amd64.zip" -DestinationPath "frp_windows_amd64"
           Remove-Item -Path "frp_windows_amd64.zip" -Force
       
-          $sourcePath = "${{ github.workspace }}\frp_windows_amd64\frp_0.52.3_windows_amd64"
+          $sourcePath = "${{ github.workspace }}\frp_windows_amd64\frp_0.54.0_windows_amd64"
           $destinationPath = "${{ github.workspace }}\frp_windows_amd64"
           Get-ChildItem -Path $sourcePath -Recurse | Move-Item -Destination $destinationPath
           Remove-Item -Path $sourcePath -Recurse -Force
