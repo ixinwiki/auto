@@ -9,7 +9,7 @@ name: Ubuntu v2
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 4,10,16,22 * * *'
 
 jobs:
   build:
@@ -85,6 +85,8 @@ jobs:
 
       - name: Don't kill instace
         run: |
-         chmod +x ./time.sh
-         sleep $(bash ./time.sh)
+          chmod +x ./time.sh
+          time=$(bash ./time.sh)
+          echo $time
+          sleep $time
 # /home/runner/work/auto/auto/.github/workflows/ubuntu_v2.yml
