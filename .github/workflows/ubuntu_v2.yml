@@ -18,30 +18,36 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Install OpenSSH server
-      - name: Install OpenSSH server
-        run: sudo apt update && sudo apt install openssh-server -y
+#      # Install OpenSSH server
+#      - name: Install OpenSSH server
+#        run: sudo apt update && sudo apt install openssh-server -y
+#
+#      # Start SSH service
+#      - name: Start SSH service
+#        run: sudo systemctl start ssh
+#
+#      # Set up SSH connection
+#      - name: Set up SSH connection
+#        run: |
+#          # sudo mkdir /var/run/sshd
+#          echo 'root:${{ secrets.SSH_PASSWD }}' | sudo chpasswd
+#          sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+#          sudo service ssh restart
+#
+#      # Check SSH service status
+#      - name: Check SSH service status
+#        run: systemctl status ssh
 
-      # Start SSH service
-      - name: Start SSH service
-        run: sudo systemctl start ssh
+      - name: Set Timezone to Asia/Shanghai
+        run: sudo timedatectl set-timezone Asia/Shanghai
 
-      # Set up SSH connection
-      - name: Set up SSH connection
-        run: |
-          # sudo mkdir /var/run/sshd
-          echo 'root:${{ secrets.SSH_PASSWD }}' | sudo chpasswd
-          sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-          sudo service ssh restart
-
-      # Check SSH service status
-      - name: Check SSH service status
-        run: systemctl status ssh
+      - name: Show Current Time
+        run: date
 
       # Install frpc
       - name: Install frpc
         run: |
-          wget -O frp_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.54.0/frp_0.54.0_linux_amd64.tar.gz
+          wget -q -O frp_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.54.0/frp_0.54.0_linux_amd64.tar.gz
           tar -xzf frp_linux_amd64.tar.gz
           mv frp_*_linux_amd64 frp_linux_amd64
           sudo mv frp_linux_amd64/frpc /usr/local/bin/
@@ -71,7 +77,7 @@ jobs:
 
       - name: Download Xray
         run: |
-          wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
+          wget -q https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
           unzip -d xray Xray-linux-64.zip
 
       - name: Get secret and create config.json

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 获取当前时间的小时和分钟
-current_hour=$(date +"%H") + 8
+current_hour=$(date +"%H")
 current_minute=$(date +"%M")
 
 # 计算当前时间与最接近的6的倍数之间的时间差
