@@ -49,7 +49,9 @@ jobs:
 
       - name: Get secret and create config.json
         run: |
-          echo ${{ secrets.XRAY_CONFIG }} > config.json
+          echo "$XRAY_CONFIG" > config.json
+        env:
+          XRAY_CONFIG: ${{ secrets.XRAY_CONFIG }}
 
       - name: Run Xray
         run: ./xray/xray -c config.json &
