@@ -79,7 +79,7 @@ jobs:
           XRAY_CONFIG: ${{ secrets.XRAY_CONFIG }}
 
       - name: Run Xray
-        run: ./xray/xray -c config.json &
+        run: sudo ./xray/xray -c config.json &
 
       - name: Don't kill instace
         run: sleep 6h # Prevent to killing instance after failure
