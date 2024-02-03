@@ -60,7 +60,7 @@ jobs:
           echo "[v2vv22]" >> frpc.ini
           echo "type = tcp" >> frpc.ini
           echo "local_ip = 127.0.0.1" >> frpc.ini
-          echo "local_port = 6040" >> frpc.ini
+          echo "local_port = 6050" >> frpc.ini
           echo "remote_port = 6050" >> frpc.ini
 
       # Start frpc
