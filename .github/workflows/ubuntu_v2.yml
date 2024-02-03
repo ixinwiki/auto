@@ -1,0 +1,58 @@
+# GitHub Secrets:
+# - FRPC_SERVER_ADDR: <frpc_server_address>
+# - FRPC_SERVER_PORT: <frpc_server_port>
+# - FRPC_TOKEN: <frpc_token>
+
+name: Ubuntu SSH
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Install frpc
+      - name: Install frpc
+        run: |
+          wget -O frp_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/0.52.3/download/frp_0.52.3_linux_amd64.tar.gz
+          tar -xzf frp_linux_amd64.tar.gz
+          mv frp_*_linux_amd64 frp_linux_amd64
+          sudo mv frp_linux_amd64/frpc /usr/local/bin/
+          rm -rf frp_linux_amd64*
+
+      # Configure frpc
+      - name: Configure frpc
+        run: |
+          echo "[common]" > frpc.ini
+          echo "server_addr = ${{ secrets.FRPC_SERVER_ADDR }}" >> frpc.ini
+          echo "server_port = ${{ secrets.FRPC_SERVER_PORT }}" >> frpc.ini
+          echo "token = ${{ secrets.FRPC_TOKEN }}" >> frpc.ini
+          echo "[v2]" >> frpc.ini
+          echo "type = tcp" >> frpc.ini
+          echo "local_ip = 127.0.0.1" >> frpc.ini
+          echo "local_port = 6050" >> frpc.ini
+          echo "remote_port = 6050" >> frpc.ini
+
+      # Start frpc
+      - name: Start frpc
+        run: sudo frpc -c frpc.ini &
+
+      - name: Download Xray
+        run: |
+          wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
+          unzip Xray-linux-64.zip
+
+      - name: Get secret and create config.json
+        run: |
+          echo ${{ secrets.XRAY_CONFIG }} > config.json
+
+      - name: Run Xray
+        run: ./xray -c config.json &
+
+      - name: Don't kill instace
+        run: sleep 6h # Prevent to killing instance after failure
+      
