@@ -1,4 +1,4 @@
-name: mac
+name: macos
 on: 
   workflow_dispatch:
 defaults:
@@ -40,9 +40,9 @@ jobs:
 
       # Start frpc
     - name: Start frpc
-      run: sudo frpc -c frpc.ini
+      run: sudo frpc -c frpc.ini &
 
     - name: Don't kill instance
       if: ${{ failure() }}
-      run: sleep 1h # Prevent killing the instance after failure
+      run: sleep 6h # Prevent killing the instance after failure
 

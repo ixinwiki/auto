@@ -8,8 +8,6 @@ name: Ubuntu v2
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 4,10,16,22 * * *'
 
 jobs:
   build:

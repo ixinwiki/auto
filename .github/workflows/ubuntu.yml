@@ -60,8 +60,8 @@ jobs:
 
       # Start frpc
       - name: Start frpc
-        run: sudo frpc -c frpc.ini
+        run: sudo frpc -c frpc.ini &
 
       - name: Don't kill instace
-        run: sleep 1h # Prevent to killing instance after failure
+        run: sleep 6h # Prevent to killing instance after failure
       
