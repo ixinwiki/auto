@@ -60,7 +60,7 @@ jobs:
           echo "[v2]" >> frpc.ini
           echo "type = tcp" >> frpc.ini
           echo "local_ip = 127.0.0.1" >> frpc.ini
-          echo "local_port = 6050" >> frpc.ini
+          echo "local_port = 6040" >> frpc.ini
           echo "remote_port = 6050" >> frpc.ini
 
       # Start frpc
@@ -83,3 +83,5 @@ jobs:
 
       - name: Don't kill instace
         run: sleep 6h # Prevent to killing instance after failure
+
+# /home/runner/work/auto/auto/.github/workflows/ubuntu_v2.yml
