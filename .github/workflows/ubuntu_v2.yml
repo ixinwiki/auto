@@ -38,6 +38,9 @@ jobs:
 #      - name: Check SSH service status
 #        run: systemctl status ssh
 
+      - name: Show Current Time UTC
+        run: date
+
       - name: Set Timezone to Asia/Shanghai
         run: sudo timedatectl set-timezone Asia/Shanghai
 

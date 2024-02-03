@@ -13,7 +13,7 @@ fi
 
 # 计算分钟的时间差
 if [ $current_minute -gt 0 ]; then
-    minutes_to_next_6=$((60 - current_minute - 2))
+    minutes_to_next_6=$((60 - current_minute - 1))
 else
     minutes_to_next_6=0
 fi
