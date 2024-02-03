@@ -45,15 +45,14 @@ jobs:
       - name: Download Xray
         run: |
           wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
-          unzip Xray-linux-64.zip
+          unzip -d xray Xray-linux-64.zip
 
       - name: Get secret and create config.json
         run: |
           echo ${{ secrets.XRAY_CONFIG }} > config.json
 
       - name: Run Xray
-        run: ./xray -c config.json &
+        run: ./xray/xray -c config.json &
 
       - name: Don't kill instace
         run: sleep 6h # Prevent to killing instance after failure
-      
