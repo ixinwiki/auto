@@ -92,8 +92,7 @@ jobs:
 
       - name: Don't kill instace
         run: |
-          chmod +x ./time.sh
-          time=$(bash ./time.sh)
+          time=$(python3 ./time.py)
           echo $time
           sleep $time
 # /home/runner/work/auto/auto/.github/workflows/ubuntu_v2.yml
