@@ -1,8 +1,6 @@
 import datetime
 
-# 手动输入时间并解析为 datetime 对象
-input_time_str = "2024-02-04 12:00:55"
-current_time = datetime.datetime.strptime(input_time_str, "%Y-%m-%d %H:%M:%S")
+current_time = datetime.datetime.now()
 
 # 获取当前时间的小时、分钟和秒
 current_hour = current_time.hour
