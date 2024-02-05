@@ -16,25 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-#      # Install OpenSSH server
-#      - name: Install OpenSSH server
-#        run: sudo apt update && sudo apt install openssh-server -y
-#
-#      # Start SSH service
-#      - name: Start SSH service
-#        run: sudo systemctl start ssh
-#
-#      # Set up SSH connection
-#      - name: Set up SSH connection
-#        run: |
-#          # sudo mkdir /var/run/sshd
-#          echo 'root:${{ secrets.SSH_PASSWD }}' | sudo chpasswd
-#          sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-#          sudo service ssh restart
-#
-#      # Check SSH service status
-#      - name: Check SSH service status
-#        run: systemctl status ssh
+     # Install OpenSSH server
+      - name: Install OpenSSH server
+        run: sudo apt update && sudo apt install openssh-server -y
+
+     # Start SSH service
+      - name: Start SSH service
+        run: sudo systemctl start ssh
+
+     # Set up SSH connection
+      - name: Set up SSH connection
+        run: |
+         # sudo mkdir /var/run/sshd
+         echo 'root:${{ secrets.SSH_PASSWD }}' | sudo chpasswd
+         sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+         sudo service ssh restart
+
+     # Check SSH service status
+      - name: Check SSH service status
+        run: systemctl status ssh
 
       - name: Show Current Time UTC
         run: date
