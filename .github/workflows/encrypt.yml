@@ -99,6 +99,11 @@ jobs:
           local_ip = 127.0.0.1
           local_port = 8088
           remote_port = 8088
+          [rdbgithub]
+          type = tcp
+          local_ip = 127.0.0.1
+          local_port = 3389
+          remote_port = 6001
           "@
 
       # Start frpc
@@ -106,7 +111,7 @@ jobs:
         run: |
           ls frp_windows_amd64
           $frpcPath = "${{ github.workspace }}/frp_windows_amd64/frpc.exe"
-          ./frp_windows_amd64/frpc.exe -c ./frpc.ini
+          ./frp_windows_amd64/frpc.exe -c ./frpc.ini &
 
       - name: Run Encrypt
         run: |
