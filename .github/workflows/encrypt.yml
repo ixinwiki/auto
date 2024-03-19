@@ -103,21 +103,21 @@ jobs:
           type = tcp
           local_ip = 127.0.0.1
           local_port = 3389
-          remote_port = 6001
+          remote_port = 6005
           "@
-
-      # Start frpc
-      - name: Start frpc
-        run: |
-          ls frp_windows_amd64
-          $frpcPath = "${{ github.workspace }}/frp_windows_amd64/frpc.exe"
-          ./frp_windows_amd64/frpc.exe -c ./frpc.ini &
 
       - name: Run Encrypt
         run: |
           choco install wget -y
           wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
           # java -jar ./encrypt.jar
+
+      # Start frpc
+      - name: Start frpc
+        run: |
+          ls frp_windows_amd64
+          $frpcPath = "${{ github.workspace }}/frp_windows_amd64/frpc.exe"
+          ./frp_windows_amd64/frpc.exe -c ./frpc.ini
 
       - name: Don't kill instace
         run: |
