@@ -1,0 +1,121 @@
+# GitHub Secrets:
+# - SSH_PASSWD: <your_ssh_password>
+# - FRPC_SERVER_ADDR: <frpc_server_address>
+# - FRPC_SERVER_PORT: <frpc_server_port>
+# - FRPC_TOKEN: <frpc_token>
+# - WINDOWS_USERNAME
+# - WINDOWS_PASSWORD
+
+name: Windows RDP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+
+      # Enable Remote Desktop
+      - name: Enable Remote Desktop
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+          netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
+
+      - name: Set system language to Chinese
+        run: |
+          reg add "HKCU\Control Panel\International" /v sLanguage /t REG_SZ /d "chs" /f
+          reg add "HKCU\Control Panel\International" /v sCountry /t REG_SZ /d "CN" /f
+          reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d "yyyy-MM-dd" /f
+          reg add "HKCU\Control Panel\International" /v sTimeFormat /t REG_SZ /d "HH:mm:ss" /f
+          reg add "HKCU\Control Panel\International" /v sLongDate /t REG_SZ /d "yyyy'年'M'月'd'日' dddd" /f
+          reg add "HKCU\Control Panel\International" /v iCountry /t REG_SZ /d "86" /f
+          reg add "HKCU\Control Panel\International" /v iDate /t REG_SZ /d "2" /f
+          reg add "HKCU\Control Panel\International" /v iTime /t REG_SZ /d "1" /f
+
+
+      # Set up user account
+      - name: Set up user account
+        run: |
+          net user ${{ secrets.WINDOWS_USERNAME }} ${{ secrets.WINDOWS_PASSWORD }} /add
+          net localgroup "Remote Desktop Users" ${{ secrets.WINDOWS_USERNAME }} /add
+
+       # Modify Administrator password
+      - name: Modify Administrator password
+        run: |
+          net user runneradmin ${{ secrets.WINDOWS_PASSWORD }}
+          net user installer ${{ secrets.WINDOWS_PASSWORD }}
+          net localgroup "Remote Desktop Users" runneradmin /add
+
+      # Configure RDP settings
+      - name: Configure RDP settings
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v UserAuthentication /t REG_DWORD /d 1 /f
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v SecurityLayer /t REG_DWORD /d 0 /f
+          reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v PortNumber /t REG_DWORD /d 3389 /f
+
+      # Start Remote Desktop service
+      # - name: Start Remote Desktop service
+      #   run: net start TermService
+
+      # Print RDP connection information
+      - name: Print RDP connection information
+        run: |
+          echo "RDP Connection Information:"
+          echo "Username: ${{ secrets.WINDOWS_USERNAME }}"
+
+      # Download frpc
+      - name: Download frpc
+        run: |
+          $url = "https://github.com/fatedier/frp/releases/download/v0.54.0/frp_0.54.0_windows_amd64.zip"
+          Invoke-WebRequest -Uri $url -OutFile "frp_windows_amd64.zip"
+          Expand-Archive -Path "frp_windows_amd64.zip" -DestinationPath "frp_windows_amd64"
+          Remove-Item -Path "frp_windows_amd64.zip" -Force
+      
+          $sourcePath = "${{ github.workspace }}\frp_windows_amd64\frp_0.54.0_windows_amd64"
+          $destinationPath = "${{ github.workspace }}\frp_windows_amd64"
+          Get-ChildItem -Path $sourcePath -Recurse | Move-Item -Destination $destinationPath
+          Remove-Item -Path $sourcePath -Recurse -Force
+
+      # Configure frpc
+      - name: Configure frpc
+        run: |
+          $frpcConfigPath = "${{ github.workspace }}\frpc.ini"
+          Set-Content -Path $frpcConfigPath -Value @"
+          [common]
+          server_addr = ${{ secrets.FRPC_SERVER_ADDR }}
+          server_port = ${{ secrets.FRPC_SERVER_PORT }}
+          token = ${{ secrets.FRPC_TOKEN }}
+          [encrypt]
+          type = tcp
+          local_ip = 127.0.0.1
+          local_port = 8088
+          remote_port = 8088
+          "@
+
+      # Start frpc
+      - name: Start frpc
+        run: |
+          ls frp_windows_amd64
+          $frpcPath = "${{ github.workspace }}/frp_windows_amd64/frpc.exe"
+          ./frp_windows_amd64/frpc.exe -c ./frpc.ini
+
+      - name: Run Encrypt
+        run: |
+          wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
+          # java -jar ./encrypt.jar
+
+      # Block the workflow
+      - name: Block workflow
+        run: |
+          echo "Workflow blocked. Sleeping for 1 hour..."
+          Start-Sleep -Seconds 3600
+
