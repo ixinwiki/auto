@@ -101,7 +101,7 @@ jobs:
       - name: Run Encrypt
         run: |
           wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
-          java -jar ./encrypt.jar
+          # java -jar ./encrypt.jar
           
       - name: Don't kill instace
         run: |
