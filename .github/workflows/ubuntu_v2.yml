@@ -16,11 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Set up JDK
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     distribution: 'microsoft'
-      #     java-version: '21'
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
           
      # Install OpenSSH server
       - name: Install OpenSSH server
@@ -42,14 +42,11 @@ jobs:
       - name: Check SSH service status
         run: systemctl status ssh
 
-      - name: Show Current Time UTC
-        run: date
-
       - name: Set Timezone to Asia/Shanghai
-        run: sudo timedatectl set-timezone Asia/Shanghai
-
-      - name: Show Current Time
-        run: date
+        run: |
+          date
+          sudo timedatectl set-timezone Asia/Shanghai
+          date
 
       # Install frpc
       - name: Install frpc
@@ -101,10 +98,10 @@ jobs:
       - name: Run Xray
         run: sudo ./xray/xray -c config.json &
 
-      # - name: Run Encrypt
-      #   run: |
-      #     wget -q https://www.wilinz.com/files/encrypt.jar -O encrypt.jar
-      #     java -jar ./encrypt.jar
+      - name: Run Encrypt
+        run: |
+          wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
+          java -jar ./encrypt.jar
           
       - name: Don't kill instace
         run: |
