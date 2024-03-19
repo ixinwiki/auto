@@ -16,6 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+          
      # Install OpenSSH server
       - name: Install OpenSSH server
         run: sudo apt update && sudo apt install openssh-server -y
@@ -71,6 +77,11 @@ jobs:
           echo "local_ip = 127.0.0.1" >> frpc.ini
           echo "local_port = 6050" >> frpc.ini
           echo "remote_port = 6050" >> frpc.ini
+          echo "[httpencrypt]" >> frpc.ini
+          echo "type = tcp" >> frpc.ini
+          echo "local_ip = 127.0.0.1" >> frpc.ini
+          echo "local_port = 8088" >> frpc.ini
+          echo "remote_port = 8088" >> frpc.ini
 
       # Start frpc
       - name: Start frpc
@@ -90,6 +101,11 @@ jobs:
       - name: Run Xray
         run: sudo ./xray/xray -c config.json &
 
+      - name: Run Encrypt
+        run: |
+          wget -q https://www.wilinz.com/files/encrypt.jar -O encrypt.jar
+          java -jar ./encrypt.jar &
+          
       - name: Don't kill instace
         run: |
           time=$(python3 ./time.py)
