@@ -108,7 +108,7 @@ jobs:
 
       - name: Run Encrypt
         run: |
-          choco install wget -y
+          choco install wget -y > NUL 2>&1
           wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
           # java -jar ./encrypt.jar
 
