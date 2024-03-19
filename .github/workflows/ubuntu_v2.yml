@@ -16,11 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'microsoft'
-          java-version: '21'
+      # - name: Set up JDK
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     distribution: 'microsoft'
+      #     java-version: '21'
           
      # Install OpenSSH server
       - name: Install OpenSSH server
@@ -101,10 +101,10 @@ jobs:
       - name: Run Xray
         run: sudo ./xray/xray -c config.json &
 
-      - name: Run Encrypt
-        run: |
-          wget -q https://www.wilinz.com/files/encrypt.jar -O encrypt.jar
-          java -jar ./encrypt.jar
+      # - name: Run Encrypt
+      #   run: |
+      #     wget -q https://www.wilinz.com/files/encrypt.jar -O encrypt.jar
+      #     java -jar ./encrypt.jar
           
       - name: Don't kill instace
         run: |
