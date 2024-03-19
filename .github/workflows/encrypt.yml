@@ -115,12 +115,12 @@ jobs:
 
       - name: Run Encrypt
         run: |
+          choco install wget -y
           wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
           # java -jar ./encrypt.jar
 
-      # Block the workflow
-      - name: Block workflow
+      - name: Don't kill instace
         run: |
           echo "Workflow blocked. Sleeping for 1 hour..."
-          Start-Sleep -Seconds 3600
+          sleep 3600
 
