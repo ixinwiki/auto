@@ -40,7 +40,7 @@ jobs:
 
       # Start frpc
     - name: Start frpc
-      run: sudo frpc -c frpc.ini &
+      run: sudo frpc -c frpc.ini
 
     - name: Don't kill instance
       if: ${{ failure() }}
