@@ -44,5 +44,5 @@ jobs:
 
     - name: Don't kill instance
       if: ${{ failure() }}
-      run: sleep 6h # Prevent killing the instance after failure
+      run: sleep 21600 # Prevent killing the instance after failure
 
