@@ -32,7 +32,7 @@ jobs:
           echo "server_addr = ${{ secrets.FRPC_SERVER_ADDR }}" >> frpc.ini
           echo "server_port = ${{ secrets.FRPC_SERVER_PORT }}" >> frpc.ini
           echo "token = ${{ secrets.FRPC_TOKEN }}" >> frpc.ini
-          echo "[ssh]" >> frpc.ini
+          echo "[macosvnc]" >> frpc.ini
           echo "type = tcp" >> frpc.ini
           echo "local_ip = 127.0.0.1" >> frpc.ini
           echo "local_port = 5900" >> frpc.ini
