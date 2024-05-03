@@ -33,7 +33,7 @@ jobs:
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
           auth.token = "${{ secrets.FRPC_TOKEN }}"
-          # transport.protocol = "quic"
+          transport.protocol = "quic"
 
           [[proxies]]
           name = "macosvnc"
