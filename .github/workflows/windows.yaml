@@ -91,8 +91,15 @@ jobs:
           transport.protocol = "quic"
 
           [[proxies]]
-          name = "rdpgithub"
+          name = "rdpgithubtcp"
           type = "tcp"
+          localIp = "127.0.0.1"
+          localPort = 3389
+          remotePort = 6001
+
+          [[proxies]]
+          name = "rdpgithubudp"
+          type = "udp"
           localIp = "127.0.0.1"
           localPort = 3389
           remotePort = 6001
