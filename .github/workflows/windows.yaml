@@ -84,10 +84,10 @@ jobs:
         run: |
           $frpcConfigPath = "${{ github.workspace }}\frpc.toml"
           Set-Content -Path $frpcConfigPath -Value @"
-          serverAddr = ${{ secrets.FRPC_SERVER_ADDR }}
+          serverAddr = "${{ secrets.FRPC_SERVER_ADDR }}"
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
-          auth.token = ${{ secrets.FRPC_TOKEN }}
+          auth.token = "${{ secrets.FRPC_TOKEN }}"
           transport.protocol = "quic"
 
           [[proxies]]
