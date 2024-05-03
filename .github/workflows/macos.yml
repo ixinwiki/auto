@@ -33,7 +33,7 @@ jobs:
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
           auth.token = "${{ secrets.FRPC_TOKEN }}"
-          transport.protocol = "quic"
+          # transport.protocol = "quic"
 
           [[proxies]]
           name = "macosvnc"
@@ -41,6 +41,14 @@ jobs:
           localIp = "127.0.0.1"
           localPort = 5900
           remotePort = 5900
+
+          [[proxies]]
+          name = "macosvncudp"
+          type = "udp"
+          localIp = "127.0.0.1"
+          localPort = 5900
+          remotePort = 5900
+          
           EOF
 
           cat frpc.toml
