@@ -28,7 +28,7 @@ jobs:
       # Configure frpc
     - name: Configure frpc
       run: |
-          cat << EOF > output.txt
+          cat << EOF > frpc.toml
           serverAddr = "${{ secrets.FRPC_SERVER_ADDR }}"
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
