@@ -83,9 +83,7 @@ jobs:
       - name: Configure frpc
         run: |
           $frpcConfigPath = "${{ github.workspace }}\frpc.toml"
-          rm $frpcConfigPath
           Set-Content -Path $frpcConfigPath -Value @"
-          
           serverAddr = ${{ secrets.FRPC_SERVER_ADDR }}
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
@@ -98,7 +96,6 @@ jobs:
           localIp = "127.0.0.1"
           localPort = 3389
           remotePort = 6001
-          
           "@
 
       # Start frpc
