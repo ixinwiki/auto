@@ -11,8 +11,7 @@ name: Windows RDP
 on:
   workflow_dispatch:
 
-jobs
-:
+jobs:
   build:
     runs-on: windows-latest
 
@@ -98,6 +97,7 @@ jobs
           localPort = 3389
           remotePort = 6001
           "@
+          cat $frpcConfigPath
 
       # Start frpc
       - name: Start frpc
