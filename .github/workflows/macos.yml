@@ -58,6 +58,5 @@ jobs:
       run: sudo frpc -c frpc.toml &
 
     - name: Don't kill instance
-      if: ${{ failure() }}
       run: /bin/sleep 21600 # Prevent killing the instance after failure
 
