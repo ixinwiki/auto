@@ -1,4 +1,4 @@
-name: macos
+name: MacOS VNC
 on: 
   workflow_dispatch:
 defaults:
@@ -28,15 +28,20 @@ jobs:
       # Configure frpc
     - name: Configure frpc
       run: |
-          echo "[common]" > frpc.ini
-          echo "server_addr = ${{ secrets.FRPC_SERVER_ADDR }}" >> frpc.ini
-          echo "server_port = ${{ secrets.FRPC_SERVER_PORT }}" >> frpc.ini
-          echo "token = ${{ secrets.FRPC_TOKEN }}" >> frpc.ini
-          echo "[macosvnc]" >> frpc.ini
-          echo "type = tcp" >> frpc.ini
-          echo "local_ip = 127.0.0.1" >> frpc.ini
-          echo "local_port = 5900" >> frpc.ini
-          echo "remote_port = 5900" >> frpc.ini
+          cat << EOF > output.txt
+          serverAddr = "${{ secrets.FRPC_SERVER_ADDR }}"
+          serverPort = ${{ secrets.FRPC_SERVER_PORT }}
+          auth.method = "token"
+          auth.token = "${{ secrets.FRPC_TOKEN }}"
+          transport.protocol = "quic"
+
+          [[proxies]]
+          name = "macosvnc"
+          type = "tcp"
+          localIp = "127.0.0.1"
+          localPort = 5900
+          remotePort = 5900
+          EOF
 
       # Start frpc
     - name: Start frpc
