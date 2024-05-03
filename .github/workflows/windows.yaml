@@ -83,6 +83,7 @@ jobs:
       - name: Configure frpc
         run: |
           $frpcConfigPath = "${{ github.workspace }}\frpc.toml"
+          rm $frpcConfigPath
           Set-Content -Path $frpcConfigPath -Value @"
           
           serverAddr = ${{ secrets.FRPC_SERVER_ADDR }}
