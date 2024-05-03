@@ -43,6 +43,8 @@ jobs:
           remotePort = 5900
           EOF
 
+          cat frpc.toml
+
       # Start frpc
     - name: Start frpc
       run: sudo frpc -c frpc.toml
