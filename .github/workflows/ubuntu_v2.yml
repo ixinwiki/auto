@@ -3,6 +3,8 @@
 # - FRPC_SERVER_ADDR: <frpc_server_address>
 # - FRPC_SERVER_PORT: <frpc_server_port>
 # - FRPC_TOKEN: <frpc_token>
+# - HY2_CONFIG
+# - HY2_SOCKS5_URL
 
 name: Ubuntu v2
 
@@ -15,32 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'microsoft'
-          java-version: '21'
-          
-     # Install OpenSSH server
-      - name: Install OpenSSH server
-        run: sudo apt update && sudo apt install openssh-server -y
-
-     # Start SSH service
-      - name: Start SSH service
-        run: sudo systemctl start ssh
-
-     # Set up SSH connection
-      - name: Set up SSH connection
-        run: |
-         # sudo mkdir /var/run/sshd
-         echo 'root:${{ secrets.SSH_PASSWD }}' | sudo chpasswd
-         sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-         sudo service ssh restart
-
-     # Check SSH service status
-      - name: Check SSH service status
-        run: systemctl status ssh
 
       - name: Set Timezone to Asia/Shanghai
         run: |
@@ -56,9 +32,9 @@ jobs:
 
       - name: Get secret and create hysteria.yml
         run: |
-          echo "$HYSTERIA_CONFIG" > hysteria.yml
+          echo "$HY2_CONFIG" > hysteria.yml
         env:
-          XRAY_CONFIG: ${{ secrets.HYSTERIA_CONFIG }}
+          XRAY_CONFIG: ${{ secrets.HY2_CONFIG }}
 
       # Start hy2 client
       - name: Start hy2 client
