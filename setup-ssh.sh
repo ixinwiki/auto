@@ -8,7 +8,7 @@ sudo systemctl start ssh
 
 echo "Set up SSH connection"
 
-echo 'root:$1' | sudo chpasswd
+echo 'root:$SSH_PASSWD' | sudo chpasswd
 sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo service ssh restart
 
