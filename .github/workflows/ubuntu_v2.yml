@@ -5,6 +5,7 @@
 # - FRPC_TOKEN: <frpc_token>
 # - HY2_CONFIG
 # - HY2_SOCKS5_URL
+# - SSH_PASSWD
 
 name: Ubuntu v2
 
@@ -24,6 +25,10 @@ jobs:
           sudo timedatectl set-timezone Asia/Shanghai
           date
 
+      - name: setup ssh
+        run: |
+          source setup-ssh.sh "${{ SSH_PASSWD }}"
+      
       # Install hy2
       - name: Install hy2
         run: |
