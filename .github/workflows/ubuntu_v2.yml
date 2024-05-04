@@ -26,8 +26,10 @@ jobs:
           date
 
       - name: setup ssh
+        env:
+          SSH_PASSWD: ${{ secrets.SSH_PASSWD }}
         run: |
-          source setup-ssh.sh "${{ SSH_PASSWD }}"
+          source setup-ssh.sh "$SSH_PASSWD"
       
       # Install hy2
       - name: Install hy2
