@@ -12,6 +12,10 @@ echo "Set up SSH connection using public key from environment variable"
 PUBLIC_KEY=$2
 
 length=$(expr length "$2")
+
+echo $1
+echo $2
+
 echo "length: $length"
 
 # 将公钥添加到授权密钥中
