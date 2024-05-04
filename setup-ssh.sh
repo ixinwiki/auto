@@ -12,7 +12,7 @@ echo "Set up SSH connection using public key from environment variable"
 PUBLIC_KEY=$SSH_PUBLIC_KEY
 
 # 将公钥添加到授权密钥中
-echo "$PUBLIC_KEY" >> ~/.ssh/authorized_keys
+echo "$PUBLIC_KEY" >> /root/.ssh/authorized_keys
 
 # 禁用密码登录
 sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
