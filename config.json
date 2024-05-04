@@ -2,7 +2,7 @@
    "inbounds":[
       {
          "tag":"socks",
-         "port":10808,
+         "port":6050,
          "listen":"127.0.0.1",
          "protocol":"socks",
          "settings":{
