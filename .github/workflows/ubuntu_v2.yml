@@ -6,6 +6,7 @@
 # - HY2_CONFIG
 # - HY2_SOCKS5_URL
 # - SSH_PASSWD
+# - SSH_PUBLIC_KEY
 
 name: Ubuntu v2
 
@@ -28,6 +29,7 @@ jobs:
       - name: setup ssh
         env:
           SSH_PASSWD: ${{ secrets.SSH_PASSWD }}
+          SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
         run: |
           source setup-ssh.sh
       
