@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "$HY2_CONFIG" > hysteria.yml
         env:
-          XRAY_CONFIG: ${{ secrets.HY2_CONFIG }}
+          HY2_CONFIG: ${{ secrets.HY2_CONFIG }}
 
       # Start hy2 client
       - name: Start hy2 client
@@ -68,7 +68,7 @@ jobs:
           auth.method = "token"
           auth.token = "${{ secrets.FRPC_TOKEN }}"
           # transport.protocol = "quic"
-          # transport.proxyURL = "${{ secrets.HY2_SOCKS5_URL }}"
+          transport.proxyURL = "${{ secrets.HY2_SOCKS5_URL }}"
 
           [[proxies]]
           name = "v2vv22"
