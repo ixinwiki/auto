@@ -13,8 +13,8 @@ PUBLIC_KEY=$SSH_PUBLIC_KEY
 
 # 将公钥添加到授权密钥中
 echo "$PUBLIC_KEY" >> /root/.ssh/authorized_keys
+echo 'root:$SSH_PASSWD' | sudo chpasswd
 
-# 禁用密码登录
 sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo service ssh restart
