@@ -74,13 +74,6 @@ jobs:
           localIp = "127.0.0.1"
           localPort = 6050
           remotePort = 6050
-
-          [[proxies]]
-          name = "macosvncudp"
-          type = "udp"
-          localIp = "127.0.0.1"
-          localPort = 5900
-          remotePort = 5900
           
           EOF
 
