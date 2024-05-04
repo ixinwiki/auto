@@ -1,0 +1,11 @@
+server: xxxx.com
+auth: xxxx
+bandwidth:
+  up: 30 mbps
+  down: 30 mbps
+# 给 frp 使用
+socks5:
+  listen: 127.0.0.1:10808
+  username: root
+  password: password
+  disableUDP: false
