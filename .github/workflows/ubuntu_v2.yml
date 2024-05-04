@@ -60,25 +60,31 @@ jobs:
       # Configure frpc
       - name: Configure frpc
         run: |
-          echo "[common]" > frpc.ini
-          echo "server_addr = ${{ secrets.FRPC_SERVER_ADDR }}" >> frpc.ini
-          echo "server_port = ${{ secrets.FRPC_SERVER_PORT }}" >> frpc.ini
-          echo "token = ${{ secrets.FRPC_TOKEN }}" >> frpc.ini
-          echo "[ssh]" >> frpc.ini
-          echo "type = tcp" >> frpc.ini
-          echo "local_ip = 127.0.0.1" >> frpc.ini
-          echo "local_port = 22" >> frpc.ini
-          echo "remote_port = 6000" >> frpc.ini
-          echo "[v2vv22]" >> frpc.ini
-          echo "type = tcp" >> frpc.ini
-          echo "local_ip = 127.0.0.1" >> frpc.ini
-          echo "local_port = 6050" >> frpc.ini
-          echo "remote_port = 6050" >> frpc.ini
-          echo "[httpencrypt]" >> frpc.ini
-          echo "type = tcp" >> frpc.ini
-          echo "local_ip = 127.0.0.1" >> frpc.ini
-          echo "local_port = 8088" >> frpc.ini
-          echo "remote_port = 8088" >> frpc.ini
+          cat << EOF > frpc.toml
+          
+          serverAddr = "${{ secrets.FRPC_SERVER_ADDR }}"
+          serverPort = ${{ secrets.FRPC_SERVER_PORT }}
+          auth.method = "token"
+          auth.token = "${{ secrets.FRPC_TOKEN }}"
+          transport.protocol = "quic"
+
+          [[proxies]]
+          name = "v2vv22"
+          type = "tcp"
+          localIp = "127.0.0.1"
+          localPort = 6050
+          remotePort = 6050
+
+          [[proxies]]
+          name = "macosvncudp"
+          type = "udp"
+          localIp = "127.0.0.1"
+          localPort = 5900
+          remotePort = 5900
+          
+          EOF
+
+          cat frpc.toml
 
       # Start frpc
       - name: Start frpc
