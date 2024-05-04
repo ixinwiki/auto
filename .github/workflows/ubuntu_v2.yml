@@ -35,7 +35,6 @@ jobs:
       - name: Install hy2
         run: |
           wget -q -O hysteria https://github.com/apernet/hysteria/releases/download/app%2Fv2.4.3/hysteria-linux-amd64-avx
-          sudo mv hysteria /usr/local/bin/
 
       - name: Get secret and create hysteria.yml
         run: |
@@ -45,7 +44,7 @@ jobs:
 
       # Start hy2 client
       - name: Start hy2 client
-        run: sudo hysteria client -c ./hysteria.yml &
+        run: sudo chmod +x ./hysteria && sudo ./hysteria client -c ./hysteria.yml &
 
           
       # Install frpc
