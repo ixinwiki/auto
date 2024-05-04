@@ -31,7 +31,7 @@ jobs:
           SSH_PASSWD: ${{ secrets.SSH_PASSWD }}
           SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
         run: |
-          sudo sh ./setup-ssh.sh "SSH_PASSWD" "SSH_PUBLIC_KEY"
+          sudo sh ./setup-ssh.sh "$SSH_PASSWD" "$SSH_PUBLIC_KEY"
       
       # Install hy2
       - name: Install hy2
