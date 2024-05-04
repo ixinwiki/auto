@@ -1,49 +1,43 @@
 {
-  "inbounds": [
-    {
-      "tag": "VMess-TCP-6040.json",
-      "port": 6050,
-      "listen": "0.0.0.0",
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "your id"
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {
-          "header": {
-            "type": "none"
-          }
-        }
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": [
-          "http",
-          "tls"
-        ]
-      }
-    }
-  ],
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  },{
-    "protocol": "blackhole",
-    "settings": {},
-    "tag": "blocked"
-  }],
-  "routing": {
-    "rules": [
+   "inbounds":[
       {
-        "type": "field",
-        "ip": ["geoip:private"],
-        "outboundTag": "blocked"
+         "tag":"socks",
+         "port":10808,
+         "listen":"127.0.0.1",
+         "protocol":"socks",
+         "settings":{
+            "auth":"password",
+            "accounts":[
+               {
+                  "user":"username",
+                  "pass":"password"
+               }
+            ],
+            "udp":true,
+            "ip":"127.0.0.1"
+         }
       }
-    ]
-  }
+   ],
+   "outbounds":[
+      {
+         "protocol":"freedom",
+         "settings":{}
+      },
+      {
+         "protocol":"blackhole",
+         "settings":{},
+         "tag":"blocked"
+      }
+   ],
+   "routing":{
+      "rules":[
+         {
+            "type":"field",
+            "ip":[
+               "geoip:private"
+            ],
+            "outboundTag":"blocked"
+         }
+      ]
+   }
 }
