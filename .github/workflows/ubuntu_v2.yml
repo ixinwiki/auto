@@ -48,6 +48,23 @@ jobs:
           sudo timedatectl set-timezone Asia/Shanghai
           date
 
+      # Install hy2
+      - name: Install hy2
+        run: |
+          wget -q -O hysteria https://github.com/apernet/hysteria/releases/download/app%2Fv2.4.3/hysteria-linux-amd64-avx
+          sudo mv hysteria /usr/local/bin/
+
+      - name: Get secret and create hysteria.yml
+        run: |
+          echo "$HYSTERIA_CONFIG" > hysteria.yml
+        env:
+          XRAY_CONFIG: ${{ secrets.HYSTERIA_CONFIG }}
+
+      # Start hy2 client
+      - name: Start hy2 client
+        run: sudo hysteria client -c ./hysteria.yml &
+
+          
       # Install frpc
       - name: Install frpc
         run: |
@@ -66,7 +83,8 @@ jobs:
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
           auth.token = "${{ secrets.FRPC_TOKEN }}"
-          transport.protocol = "quic"
+          # transport.protocol = "quic"
+          transport.proxyURL = "${{ secrets.HY2_SOCKS5_URL }}"
 
           [[proxies]]
           name = "v2vv22"
