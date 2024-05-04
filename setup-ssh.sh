@@ -15,7 +15,8 @@ PUBLIC_KEY=$SSH_PUBLIC_KEY
 echo "$PUBLIC_KEY" >> /root/.ssh/authorized_keys
 
 # 禁用密码登录
-sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo service ssh restart
 
 echo "Check SSH service status"
