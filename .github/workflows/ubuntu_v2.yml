@@ -81,7 +81,7 @@ jobs:
 
       # Start frpc
       - name: Start frpc
-        run: sudo frpc -c frpc.ini &
+        run: sudo frpc -c frpc.toml &
 
       - name: Download Xray
         run: |
@@ -96,11 +96,6 @@ jobs:
 
       - name: Run Xray
         run: sudo ./xray/xray -c config.json &
-
-      - name: Run Encrypt
-        run: |
-          wget -q ${{ secrets.ENCRYPTJAR_URL }} -O encrypt.jar
-          # java -jar ./encrypt.jar
           
       - name: Don't kill instace
         run: |
