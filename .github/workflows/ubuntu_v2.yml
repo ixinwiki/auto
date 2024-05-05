@@ -67,8 +67,8 @@ jobs:
           serverPort = ${{ secrets.FRPC_SERVER_PORT }}
           auth.method = "token"
           auth.token = "${{ secrets.FRPC_TOKEN }}"
-          # transport.protocol = "quic"
-          transport.proxyURL = "${{ secrets.HY2_SOCKS5_URL }}"
+          transport.protocol = "quic"
+          # transport.proxyURL = "${{ secrets.HY2_SOCKS5_URL }}"
 
           [[proxies]]
           name = "v2vv22"
