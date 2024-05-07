@@ -7,7 +7,7 @@ defaults:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13.6.6
     steps:
     - uses: actions/checkout@v3
     - name: Setting the environment up.
